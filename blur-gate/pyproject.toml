@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "blur-gate"
+version = "0.1.0"
+description = "Deterministic Laplacian-variance blur filter for surgical image calibration."
+readme = "README.md"
+packages = [{ include = "blur_gate", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+numpy = "^2.0.0"
+opencv-python-headless = "^4.10.0"
+pyyaml = "^6.0.0"
+streamlit = "^1.38.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.0"
+ruff = "^0.6.0"
+pyright = "^1.1.380"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "ui"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = []
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"

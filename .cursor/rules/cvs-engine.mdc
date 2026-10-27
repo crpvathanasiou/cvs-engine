@@ -1,0 +1,57 @@
+---
+description: Project-wide CVS Engine development rules
+alwaysApply: true
+---
+
+# CVS Engine Project Rules
+
+This repository builds reusable ML experiment infrastructure for AI-assisted Critical View of Safety scoring research in laparoscopic cholecystectomy.
+
+## Architecture (canonical intent)
+
+- **One repository**, one shared Python package (`src/cvs_engine/`), with **two independently executable stages**.
+- Each stage has its own entrypoint, configuration, output artifacts, and execution report. Shared logic stays in the existing dataset, model, task, training, evaluation, and utility packages.
+- **Stage 1** uses a **frozen pretrained visual encoder**, caches embeddings, aggregates image embeddings per case, and trains a prediction head (and optional trainable aggregation). Stage 1 includes predictor training; it is not feature extraction alone.
+- **Stage 2** adapts the encoder through fine-tuning with appropriate prediction/aggregation modules, using original images and Stage 1 handoff artifacts.
+- A thin stage orchestration layer (for example `src/cvs_engine/stages/`) is **proposed only** until an approved milestone creates it. Do not invent executable stage entrypoints ahead of approval.
+
+Canonical detail lives in `.ai/00_project_reference.md` and `.ai/01_implementation_roadmap.md`.
+
+## Milestone discipline
+
+- Implement **only** the milestone approved in `.ai/90_current_milestone.md`.
+- Prefer small, bounded changes. Do not expand into the next milestone “while you are here.”
+- Clearly separate **implemented** behavior from **planned / proposed** functionality in docs and reports.
+- After implementation, update `.ai/91_implementation_report.md` with changed files, summary, verification evidence, limitations, and intentionally not implemented items.
+- Review findings belong in `.ai/92_review_report.md`; corrections in `.ai/93_corrections.md`. Do not declare human/independent review acceptance in implementation reports.
+
+## Safety and scope
+
+- Do not make clinical claims.
+- Research experiment outputs only; no medical decision support, patient-facing guidance, or live-surgery advice.
+- Do not add real datasets, VLMs, SAM-2, Optuna, MLflow, advanced UI, cloud setup, or production deployment unless explicitly approved in the current milestone.
+- The Streamlit UI is a minimal local visibility layer, not a production dashboard.
+- Both stages must eventually support CLI execution without launching Streamlit (when stage milestones authorize that work).
+
+## Engineering defaults
+
+- Keep the code Linux/DGX-ready and WSL2/Ubuntu-friendly.
+- Use Poetry for dependency management (Python 3.11).
+- Keep the project config-driven and testable.
+- Future functionality changes must include meaningful tests for introduced behavior, relevant failure cases, and affected integration boundaries.
+- Always report changed files and verification results.
+- Prefer `poetry run python -m pytest`, `poetry run ruff check .`, and `poetry run pyright` as the quality baseline.
+
+## Canonical documents (do not duplicate full contents here)
+
+| Path | Role |
+| --- | --- |
+| `.ai/00_project_reference.md` | Identity, boundaries, I/O contract |
+| `.ai/01_implementation_roadmap.md` | Stage 1 milestones and later work |
+| `.ai/02_code_quality_standards.md` | Engineering standards |
+| `.ai/03_common_handoff.md` | Session restart handoff |
+| `.ai/04_code_map.md` | Repository map (implemented vs proposed) |
+| `.ai/90_current_milestone.md` | Approved / pending milestone |
+| `.ai/91_implementation_report.md` | Implementation evidence |
+| `.ai/92_review_report.md` | Review status |
+| `.ai/93_corrections.md` | Correction rounds |

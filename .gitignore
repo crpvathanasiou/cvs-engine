@@ -1,0 +1,35 @@
+# Virtualenv
+.venv/
+
+# Local env vars (do not commit secrets)
+.env
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Test cache
+.pytest_cache/
+
+# Ruff cache
+.ruff_cache/
+
+# Pyright cache
+.pyright/
+
+# OS/editor
+.vscode/
+.idea/
+.DS_Store
+
+# ML experiment outputs (later milestones)
+checkpoints/
+outputs/
+reports/
+mlruns/
+lightning_logs/
+
+# === Project Specific Files ===
+template-setup-steps.txt
